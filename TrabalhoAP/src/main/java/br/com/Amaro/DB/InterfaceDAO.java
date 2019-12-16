@@ -17,5 +17,5 @@ public interface InterfaceDAO {
     public List busca(String pesquisa);
     public List busca();
     public void atualiza(Contato contato);
-    public void deleta(int contato);
+    public String deleta(int contato);
 }

@@ -36,10 +36,7 @@ public class Contato {
         this.endereco = endereco;
         this.anotacao = anotacao;
     }
-    
-    
-    
-    
+ 
     public String getNome() {
         return nome;
     }
@@ -84,7 +81,13 @@ public class Contato {
 
     @Override
     public String toString() {
-        return "Contato{" + "id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", endereco=" + endereco + ", anotacao=" + anotacao + '}';
+        return String.format("==================\n"
+                + "ID: %d \n"
+                + "Nome: %s \n"
+                + "Telefone: %s \n"
+                + "Endereço: %s \n"
+                + "Anotação: %s \n"
+                + "==================", this.id, this.nome, this.telefone, this.endereco, this.anotacao);
     }
 
 

@@ -10,10 +10,9 @@ import java.util.Scanner;
  *
  * @author Luis Amaro
  */
-public class Funcao {
+public class Funcao extends ContatoDAO {
 
     Scanner tc = new Scanner(System.in);
-    ContatoDAO crud = new ContatoDAO();
 
     public void menu() {
         Scanner tc = new Scanner(System.in);
@@ -31,7 +30,7 @@ public class Funcao {
             opcao = tc.nextInt();
             switch (opcao) {
                 case 1:
-                    crud.grava(adicionaContato());
+                    grava(adicionaContato());
                     System.out.println("OK! Contato adicionado a agenda :)");
                     break;
                 case 2:
@@ -40,7 +39,7 @@ public class Funcao {
                     }
                     break;
                 case 3:
-                    for (Contato c : crud.busca()){
+                    for (Contato c : busca()){
                         System.out.println(c);
                     }
                     break;
@@ -49,10 +48,15 @@ public class Funcao {
                     System.out.println("OK! Feito");
                     break;
                 case 5:
+                    System.out.print("ID para deletar: ");
+                    int id = tc.nextInt();
+                    System.out.println(deleta(id));
+                    
                     break;
                 case 6:
                     System.exit(0);
                 default:
+                    System.out.println("OPÇÃO INVÁLIDA");
                     menu();
 
             }
@@ -84,7 +88,7 @@ public class Funcao {
     public List<Contato> buscarContato() {
         System.out.println("Insira o que quer buscar: ");
         String strBusca = tc.nextLine();
-        return crud.busca(strBusca);
+        return busca(strBusca);
     }
     
     public void AtualizaContato(){
@@ -102,7 +106,7 @@ public class Funcao {
             System.out.println("Somente o campo anotacao pode ser nulo");
         } else {
             Contato c = new Contato(id, nome, telefone, endereco, anotacao);
-            crud.atualiza(c);
+            atualiza(c);
             System.out.println("Contato Atualizado:");
             System.out.println(c.toString());
         }

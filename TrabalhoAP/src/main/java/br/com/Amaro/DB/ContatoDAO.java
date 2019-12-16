@@ -6,6 +6,7 @@
 package br.com.Amaro.DB;
 
 import br.com.Amaro.Entidade.Contato;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,8 +55,9 @@ public class ContatoDAO extends Conexao implements InterfaceDAO {
             stmt.setString(2, pesquisa);
             stmt.setString(3, pesquisa);
             rs = stmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Contato buscaContato = new Contato();
+                buscaContato.setId(rs.getInt("id"));
                 buscaContato.setNome(rs.getString("nome"));
                 buscaContato.setEndereco(rs.getString("endereco"));
                 buscaContato.setTelefone(rs.getString("telefone"));
@@ -67,7 +69,7 @@ public class ContatoDAO extends Conexao implements InterfaceDAO {
         }
         return contatos;
     }
-    
+
     @Override
     public List<Contato> busca() {
         String sql = "select * from contatos";
@@ -78,8 +80,9 @@ public class ContatoDAO extends Conexao implements InterfaceDAO {
         try {
             stmt = getConnection().prepareStatement(sql);
             rs = stmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Contato criarContato = new Contato();
+                criarContato.setId(rs.getInt("id"));
                 criarContato.setNome(rs.getString("nome"));
                 criarContato.setTelefone(rs.getString("telefone"));
                 criarContato.setEndereco(rs.getString("endereco"));
@@ -116,21 +119,29 @@ public class ContatoDAO extends Conexao implements InterfaceDAO {
     }
 
     @Override
-    public void deleta(int contato) {
-        String sql = "delete from contatos where id = ?";
+    public String deleta(int contato) {
+        String sql = "select * from contatos";
         getConnection();
         PreparedStatement stmt = null;
+        ResultSet rs = null;
         try {
-            stmt = getConnection().prepareStatement(sql);
-            stmt.setInt(1, contato);
-            stmt.execute();
+            stmt = getConnection().prepareStatement(sql,ResultSet.TYPE_FORWARD_ONLY,
+                                  ResultSet.CONCUR_UPDATABLE);
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+               if(rs.getInt("id")==contato){
+                   rs.deleteRow();
+                   return "Contato Deletado";
+               } 
+            }
+
             getConnection().close();
 
         } catch (SQLException ex) {
             System.out.println("Algo está errado");
+            ex.printStackTrace();
         }
+        return "Não há um contato com esse ID";
     }
-
-    
 
 }
